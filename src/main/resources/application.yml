@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: jas-api
+  jpa:
+    open-in-view: false
+  datasource:
+    url: jdbc:postgresql://${JAS_DB_HOST}:${JAS_DB_PORT}/${JAS_DB_NAME}?currentSchema=${JAS_DB_SCHEMA}
+    username: ${JAS_DB_USER}
+    password: ${JAS_DB_PASS}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
