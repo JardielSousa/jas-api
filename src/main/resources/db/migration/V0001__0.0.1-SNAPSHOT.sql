@@ -1,5 +1,7 @@
-CREATE TABLE jas_teste(
+CREATE TABLE produto (
     id bigserial NOT NULL,
-    nome VARCHAR(255) NOT NULL,
-    CONSTRAINT jas_teste_pkey PRIMARY KEY (id)
+    nome VARCHAR(60) NOT NULL,
+    descricao VARCHAR(100) NOT NULL,
+    preco NUMERIC(19, 2) NOT NULL,
+    CONSTRAINT produto_pkey PRIMARY KEY (id)
 );

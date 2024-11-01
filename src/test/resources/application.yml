@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: jas-api
+  jpa:
+    open-in-view: false
+  flyway:
+    enabled: true
