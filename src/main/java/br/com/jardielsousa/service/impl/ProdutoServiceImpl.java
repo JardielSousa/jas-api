@@ -6,39 +6,28 @@ import br.com.jardielsousa.model.dto.produto.ProdutoCriarRequest;
 import br.com.jardielsousa.repositoty.ProdutoRepository;
 import br.com.jardielsousa.service.base.ProdutoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
 
     private final ProdutoRepository produtoRepository;
 
+    private final ModelMapper modelMapper;
+
     @Override
     public Produto criarProduto(final ProdutoCriarRequest request) {
-        return Produto.builder()
-                .nome(request.getNome())
-                .descricao(request.getDescricao())
-                .preco(request.getPreco())
-                .build();
+        return this.modelMapper.map(request, Produto.class);
     }
 
     @Override
     public Produto criar(final Produto produto) {
-        final var save = this.produtoRepository.save(this.toEntity(produto));
-        return Produto.builder()
-                .id(save.getId())
-                .nome(save.getNome())
-                .descricao(save.getDescricao())
-                .preco(save.getPreco())
-                .build();
+        final var save = this.produtoRepository.save(this.modelMapper.map(produto, ProdutoEntity.class));
+        return this.modelMapper.map(save, Produto.class);
     }
 
-    private ProdutoEntity toEntity(Produto produto) {
-        return ProdutoEntity.builder()
-                .nome(produto.getNome())
-                .descricao(produto.getDescricao())
-                .preco(produto.getPreco())
-                .build();
-    }
 }
