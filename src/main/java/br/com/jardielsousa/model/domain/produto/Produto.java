@@ -1,5 +1,6 @@
 package br.com.jardielsousa.model.domain.produto;
 
+import br.com.jardielsousa.model.enumeration.ProdutoStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 public class Produto {
 
@@ -19,5 +21,7 @@ public class Produto {
     private String descricao;
 
     private BigDecimal preco;
+
+    private ProdutoStatus status;
 
 }

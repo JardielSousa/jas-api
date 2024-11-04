@@ -6,5 +6,5 @@ public record ProdutoCriarResponse(
     Long id,
     String nome,
     String descricao,
-    BigDecimal preco) {
-}
+    BigDecimal preco
+) { }

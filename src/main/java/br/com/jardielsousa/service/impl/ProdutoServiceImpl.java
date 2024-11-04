@@ -10,6 +10,8 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Log4j2
 @RequiredArgsConstructor
 @Service
@@ -30,4 +32,11 @@ public class ProdutoServiceImpl implements ProdutoService {
         return this.modelMapper.map(save, Produto.class);
     }
 
+    @Override
+    public List<Produto> buscarTodos() {
+        final List<ProdutoEntity> produtosEntity = this.produtoRepository.findAll();
+        return produtosEntity.stream()
+                .map(produtoEntity -> this.modelMapper.map(produtoEntity, Produto.class))
+                .toList();
+    }
 }
