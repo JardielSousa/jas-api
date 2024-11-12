@@ -12,4 +12,8 @@ public interface ProdutoService {
     Produto criar(Produto produto);
 
     List<Produto> buscarTodos();
+
+    Produto alterarProduto(Long id);
+
+    Boolean ativarDesativarProduto(Long id);
 }

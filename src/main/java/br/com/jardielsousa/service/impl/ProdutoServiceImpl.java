@@ -3,6 +3,7 @@ package br.com.jardielsousa.service.impl;
 import br.com.jardielsousa.entity.ProdutoEntity;
 import br.com.jardielsousa.model.domain.produto.Produto;
 import br.com.jardielsousa.model.dto.produto.ProdutoCriarRequest;
+import br.com.jardielsousa.model.enumeration.ProdutoStatus;
 import br.com.jardielsousa.repositoty.ProdutoRepository;
 import br.com.jardielsousa.service.base.ProdutoService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -38,5 +41,30 @@ public class ProdutoServiceImpl implements ProdutoService {
         return produtosEntity.stream()
                 .map(produtoEntity -> this.modelMapper.map(produtoEntity, Produto.class))
                 .toList();
+    }
+
+    @Override
+    public Produto alterarProduto(final Long id) {
+        return new Produto();
+    }
+
+    @Override
+    public Boolean ativarDesativarProduto(final Long id) {
+        final var optionalProdutoEntity = this.produtoRepository.findById(id);
+        if (optionalProdutoEntity.isPresent()) {
+            var produtoEntity = optionalProdutoEntity.get();
+            final var status = (produtoEntity.getStatus().equals(ProdutoStatus.ATIVO)) ? ProdutoStatus.INATIVO : ProdutoStatus.ATIVO;
+            produtoEntity.setStatus(status);
+            produtoEntity = this.alterarProduto(produtoEntity);
+
+            return produtoEntity.getStatus().equals(ProdutoStatus.ATIVO);
+        }
+
+        throw new IllegalArgumentException();
+    }
+
+    private ProdutoEntity alterarProduto(final ProdutoEntity produto) {
+        produto.setDataAlteracao(LocalDateTime.now());
+        return this.produtoRepository.save(produto);
     }
 }

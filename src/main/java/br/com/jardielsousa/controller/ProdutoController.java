@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +42,18 @@ public class ProdutoController {
         log.info("Buscando todos os produtos");
         final var produtos = this.produtoService.buscarTodos();
         return ResponseEntity.ok(new ProdutoBuscarTodosResponse(produtos));
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> alterarProduto(@PathVariable(value = "id") final Long id) {
+        log.info("Alterando o produto de id: {}", id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Boolean> ativarDesativarProduto(@PathVariable(value = "id") final Long id) {
+        log.info("Ativando / desativando produto de id: {}", id);
+        final var b = this.produtoService.ativarDesativarProduto(id);
+        return ResponseEntity.ok(b);
     }
 }
