@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-@Log4j2
 @RequiredArgsConstructor
+@Log4j2
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
 
@@ -31,16 +30,13 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public Produto criar(final Produto produto) {
-        final var save = this.produtoRepository.save(this.modelMapper.map(produto, ProdutoEntity.class));
-        return this.modelMapper.map(save, Produto.class);
+        final var produtoEntitySalvo = this.produtoRepository.save(this.modelMapper.map(produto, ProdutoEntity.class));
+        return this.produtoEntityParaProduto(produtoEntitySalvo);
     }
 
     @Override
     public List<Produto> buscarTodos() {
-        final List<ProdutoEntity> produtosEntity = this.produtoRepository.findAll();
-        return produtosEntity.stream()
-                .map(produtoEntity -> this.modelMapper.map(produtoEntity, Produto.class))
-                .toList();
+        return this.produtoRepository.findAll().stream().map(this::produtoEntityParaProduto).toList();
     }
 
     @Override
@@ -67,4 +63,9 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setDataAlteracao(LocalDateTime.now());
         return this.produtoRepository.save(produto);
     }
+
+    private Produto produtoEntityParaProduto(ProdutoEntity produtoEntitySalvo) {
+        return this.modelMapper.map(produtoEntitySalvo, Produto.class);
+    }
+
 }

@@ -11,12 +11,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @Data
-public class ProdutoCriarRequest {
+public class ProdutoAlterarRequest {
 
     private String nome;
 
     private String descricao;
 
     private BigDecimal preco;
-
 }

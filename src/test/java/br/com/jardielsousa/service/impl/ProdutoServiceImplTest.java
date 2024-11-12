@@ -26,13 +26,12 @@ class ProdutoServiceImplTest {
 
     @Test
     void criarProduto() {
-        final ProdutoCriarRequest request = ProdutoFactory.criarProdutoRequest();
+        final ProdutoCriarRequest request = ProdutoFactory.fabricarProdutoCriarRequest();
         final Produto produto = this.produtoService.criarProduto(request);
         assertThat(produto).isNotNull();
         assertThat(produto.getNome()).isEqualTo(request.getNome());
         assertThat(produto.getDescricao()).isEqualTo(request.getDescricao());
         assertThat(produto.getPreco()).isEqualTo(request.getPreco());
-        assertThat(produto.getStatus()).isEqualTo(request.getStatus());
     }
 
     @Test
@@ -43,7 +42,7 @@ class ProdutoServiceImplTest {
 
     @Test
     void buscarTodos() {
-        when(this.produtoRepository.findAll()).thenReturn(ProdutoFactory.criarProdutosEntity());
+        when(this.produtoRepository.findAll()).thenReturn(ProdutoFactory.fabricarProdutosEntity());
         assertThatCode(() -> this.produtoService.buscarTodos()).doesNotThrowAnyException();
     }
 

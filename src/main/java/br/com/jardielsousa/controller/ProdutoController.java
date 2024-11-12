@@ -1,5 +1,6 @@
 package br.com.jardielsousa.controller;
 
+import br.com.jardielsousa.model.dto.produto.ProdutoAlterarRequest;
 import br.com.jardielsousa.model.dto.produto.ProdutoBuscarTodosResponse;
 import br.com.jardielsousa.model.dto.produto.ProdutoCriarRequest;
 import br.com.jardielsousa.model.dto.produto.ProdutoCriarResponse;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+import static br.com.jardielsousa.config.RestControllerMappingValueConfig.PRODUTOS;
+
 @RequiredArgsConstructor
 @Log4j2
 @RestController
-@RequestMapping(value = "/produtos")
+@RequestMapping(value = PRODUTOS)
 public class ProdutoController {
 
     private final ProdutoService produtoService;
@@ -34,7 +37,9 @@ public class ProdutoController {
         final var produto = this.produtoService.criarProduto(request);
         final var criado = this.produtoService.criar(produto);
 
-        return ResponseEntity.created(URI.create("/produtos/" + criado.getId())).build();
+        return ResponseEntity.created(URI.create("/produtos/" + criado.getId())).body(new ProdutoCriarResponse(
+                criado.getId(), criado.getNome(), criado.getDescricao(), criado.getPreco()
+        ));
     }
 
     @GetMapping
@@ -45,15 +50,14 @@ public class ProdutoController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Void> alterarProduto(@PathVariable(value = "id") final Long id) {
+    public ResponseEntity<Void> alterar(@PathVariable(value = "id") final Long id, @RequestBody final ProdutoAlterarRequest request) {
         log.info("Alterando o produto de id: {}", id);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<Boolean> ativarDesativarProduto(@PathVariable(value = "id") final Long id) {
-        log.info("Ativando / desativando produto de id: {}", id);
-        final var b = this.produtoService.ativarDesativarProduto(id);
-        return ResponseEntity.ok(b);
+        log.info("Ativar | Desativar produto de id: {}", id);
+        return ResponseEntity.ok(this.produtoService.ativarDesativarProduto(id));
     }
 }
