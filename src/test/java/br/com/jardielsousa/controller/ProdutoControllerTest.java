@@ -52,7 +52,17 @@ class ProdutoControllerTest {
 
     @Test
     void alterar() throws Exception {
-        this.mockMvc.perform(put(PRODUTOS + "/1")).andExpect(status().isOk());
+        when(this.produtoService.alterarProduto(any(), any())).thenReturn(new Produto());
+
+        this.mockMvc.perform(put(PRODUTOS + "/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                          "nome": "Produto 01",
+                          "descricao": "Descrição 01",
+                          "preco": 10.0,
+                          "status": "ATIVO"
+                        }""")).andExpect(status().isOk());
     }
 
     @Test

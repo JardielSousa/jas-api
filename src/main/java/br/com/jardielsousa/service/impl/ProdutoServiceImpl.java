@@ -2,6 +2,7 @@ package br.com.jardielsousa.service.impl;
 
 import br.com.jardielsousa.entity.ProdutoEntity;
 import br.com.jardielsousa.model.domain.produto.Produto;
+import br.com.jardielsousa.model.dto.produto.ProdutoAlterarRequest;
 import br.com.jardielsousa.model.dto.produto.ProdutoCriarRequest;
 import br.com.jardielsousa.model.enumeration.ProdutoStatus;
 import br.com.jardielsousa.repositoty.ProdutoRepository;
@@ -29,6 +30,11 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
+    public Produto criarProduto(final ProdutoAlterarRequest request) {
+        return this.modelMapper.map(request, Produto.class);
+    }
+
+    @Override
     public Produto criar(final Produto produto) {
         final var produtoEntitySalvo = this.produtoRepository.save(this.modelMapper.map(produto, ProdutoEntity.class));
         return this.produtoEntityParaProduto(produtoEntitySalvo);
@@ -40,8 +46,18 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public Produto alterarProduto(final Long id) {
-        return new Produto();
+    public Produto alterarProduto(final Long id, final Produto produto) {
+        final var optionalProdutoEntity = this.produtoRepository.findById(id);
+        if (optionalProdutoEntity.isPresent()) {
+            final var produtoEntity = optionalProdutoEntity.get();
+            produtoEntity.setNome(produto.getNome());
+            produtoEntity.setDescricao(produto.getDescricao());
+            produtoEntity.setPreco(produto.getPreco());
+
+            return this.produtoEntityParaProduto(this.alterarProduto(produtoEntity));
+        }
+
+        throw new IllegalArgumentException("Produto não encontrado");
     }
 
     @Override
@@ -64,7 +80,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         return this.produtoRepository.save(produto);
     }
 
-    private Produto produtoEntityParaProduto(ProdutoEntity produtoEntitySalvo) {
+    private Produto produtoEntityParaProduto(final ProdutoEntity produtoEntitySalvo) {
         return this.modelMapper.map(produtoEntitySalvo, Produto.class);
     }
 
