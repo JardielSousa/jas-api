@@ -9,7 +9,6 @@ import br.com.jardielsousa.repositoty.ProdutoRepository;
 import br.com.jardielsousa.service.base.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,21 +21,19 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     private final ProdutoRepository produtoRepository;
 
-    private final ModelMapper modelMapper;
-
     @Override
     public Produto criarProduto(final ProdutoCriarRequest request) {
-        return this.modelMapper.map(request, Produto.class);
+        return new Produto(null, request.getNome(), request.getDescricao(), request.getPreco(), null);
     }
 
     @Override
     public Produto criarProduto(final ProdutoAlterarRequest request) {
-        return this.modelMapper.map(request, Produto.class);
+        return new Produto(null, request.getNome(), request.getDescricao(), request.getPreco(), null);
     }
 
     @Override
     public Produto criar(final Produto produto) {
-        final var produtoEntitySalvo = this.produtoRepository.save(this.modelMapper.map(produto, ProdutoEntity.class));
+        final var produtoEntitySalvo = this.produtoRepository.save(new ProdutoEntity(null, produto.getNome(), produto.getDescricao(), produto.getPreco()));
         return this.produtoEntityParaProduto(produtoEntitySalvo);
     }
 
@@ -81,7 +78,12 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     private Produto produtoEntityParaProduto(final ProdutoEntity produtoEntitySalvo) {
-        return this.modelMapper.map(produtoEntitySalvo, Produto.class);
+        return new Produto(
+                produtoEntitySalvo.getId(),
+                produtoEntitySalvo.getNome(),
+                produtoEntitySalvo.getDescricao(),
+                produtoEntitySalvo.getPreco(),
+                produtoEntitySalvo.getStatus());
     }
 
 }

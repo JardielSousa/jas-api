@@ -27,9 +27,8 @@ public enum ProdutoStatus {
     }
 
     public static ProdutoStatus porCodigo(final Integer codigo) {
-        final var status = map.get(codigo);
-        if (nonNull(status)) {
-            return status;
+        if (nonNull(codigo) && map.containsKey(codigo)) {
+            return map.get(codigo);
         }
 
         throw new IllegalArgumentException("Código inválido: " + codigo);

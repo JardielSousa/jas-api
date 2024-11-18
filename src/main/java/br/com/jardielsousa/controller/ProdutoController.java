@@ -51,12 +51,18 @@ public class ProdutoController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProdutoAlterarResponse> alterar(@PathVariable(value = "id") final Long id, @RequestBody final ProdutoAlterarRequest request) {
+    public ResponseEntity<ProdutoAlterarResponse> alterar(
+            @PathVariable(value = "id") final Long id,
+            @RequestBody final ProdutoAlterarRequest request
+    ) {
         log.info("Alterando o produto de id: {}", id);
         final var produto = this.produtoService.criarProduto(request);
         final var produtoAtualizado = this.produtoService.alterarProduto(id, produto);
         return ResponseEntity.ok(new ProdutoAlterarResponse(
-                produtoAtualizado.getId(), produtoAtualizado.getNome(), produtoAtualizado.getDescricao(), produtoAtualizado.getPreco()
+                produtoAtualizado.getId(),
+                produtoAtualizado.getNome(),
+                produtoAtualizado.getDescricao(),
+                produtoAtualizado.getPreco()
         ));
     }
 

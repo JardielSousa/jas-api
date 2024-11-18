@@ -1,6 +1,7 @@
 package br.com.jardielsousa.factories;
 
 import br.com.jardielsousa.entity.ProdutoEntity;
+import br.com.jardielsousa.model.dto.produto.ProdutoAlterarRequest;
 import br.com.jardielsousa.model.dto.produto.ProdutoCriarRequest;
 import br.com.jardielsousa.model.dto.produto.ProdutoCriarResponse;
 import br.com.jardielsousa.model.enumeration.ProdutoStatus;
@@ -20,24 +21,24 @@ public final class ProdutoFactory {
                 .build();
     }
 
-    public static ProdutoEntity fabricarProdutoEntity(final String nome) {
+    public static ProdutoEntity fabricarProdutoEntity(final String nome, final ProdutoStatus status) {
         return ProdutoEntity.builder()
                 .nome(nome)
                 .descricao(String.format("Descrição do %s", nome))
                 .preco(BigDecimal.TEN)
-                .status(ProdutoStatus.ATIVO)
+                .status(status)
                 .build();
     }
 
     public static List<ProdutoEntity> fabricarProdutosEntity() {
-        final var produto1 = fabricarProdutoEntity("Produto 01");
-        final var produto2 = fabricarProdutoEntity("Produto 02");
-        final var produto3 = fabricarProdutoEntity("Produto 03");
+        final var produto1 = fabricarProdutoEntity("Produto 01", ProdutoStatus.ATIVO);
+        final var produto2 = fabricarProdutoEntity("Produto 02", ProdutoStatus.ATIVO);
+        final var produto3 = fabricarProdutoEntity("Produto 03", ProdutoStatus.ATIVO);
 
         return List.of(produto1, produto2, produto3);
     }
 
-    public static ProdutoCriarResponse fabricarProdutoCriarResponse(final Long id, final String nome) {
-        return new ProdutoCriarResponse(id, nome, String.format("Descrição do %s", nome), BigDecimal.TEN);
+    public static ProdutoAlterarRequest fabricarProdutoAlterarRequest(final String nome) {
+        return new ProdutoAlterarRequest(nome, "Descrição do " + nome, BigDecimal.TEN);
     }
 }

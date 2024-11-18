@@ -12,11 +12,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
 @Entity
@@ -42,7 +44,11 @@ public class ProdutoEntity {
     @Column(name = "data_alteracao")
     private LocalDateTime dataAlteracao;
 
-    public ProdutoEntity() {
+    public ProdutoEntity(final Long id, final String nome, final String descricao, final BigDecimal preco) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
         this.status = ProdutoStatus.ATIVO;
         this.dataCadastro = LocalDateTime.now();
         this.dataAlteracao = LocalDateTime.now();
